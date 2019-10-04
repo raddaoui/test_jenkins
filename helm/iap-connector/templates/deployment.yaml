@@ -10,6 +10,8 @@ kind: Deployment
 metadata:
   name: {{ $fullName }}-{{ $ai.ambassadorID }}
   labels:
+    service: ambassador
+    id: {{ $ai.ambassadorID }}
 {{ $labels | indent 4 }}
 spec:
   replicas: {{ $ai.replicaCount }}
@@ -33,6 +35,8 @@ spec:
         resources:
           {{- toYaml $ai.resources | nindent 12 }}
         env:
+        - name: STATSD_ENABLED
+          value: "true"
         - name: AMBASSADOR_ID
           value: {{ $ai.ambassadorID }}
         - name: AMBASSADOR_NAMESPACE

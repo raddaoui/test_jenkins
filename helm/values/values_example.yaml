@@ -4,7 +4,7 @@
 
 ambassadorInstances:
   - ambassadorID: ambassador-1
-    replicaCount: 3
+    replicaCount: 8
     resources:
       limits:
         cpu: 1
@@ -15,10 +15,9 @@ ambassadorInstances:
     image:
       repository: quay.io/datawire/ambassador
       tag: 0.39.0
-      pullPolicy: IfNotPresent
-
+      pullPolicy: Always
   - ambassadorID: ambassador-2
-    replicaCount: 3
+    replicaCount: 8
     resources:
       limits:
         cpu: 1
@@ -29,35 +28,34 @@ ambassadorInstances:
     image:
       repository: quay.io/datawire/ambassador
       tag: 0.39.0
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
 
 ingresses:
-  - name: ingress1
-    externalIpName: ambassador-ip
+  - name: [ingress name]
+    externalIpName: [allocated external ip name]
     certs:
-      - mycert
-      - mcrt-0b790331-6165-47f7-aa79-070792e1ed64
+      - [cert1]
+      - [cert2]
+    enable_container_native_lb: true
     routing:
-      - name: test
-        ambassadorID: ambassador-1
-        mapping:
-          - name: host
-            source: ttest.haktech.io
-            destination: google.com
-
-  - name: ingress2
-    externalIpName: ambassador-ip-2
-    certs:
-      - mycert
-      - mcrt-0b790331-6165-47f7-aa79-070792e1ed64
-    routing:
-      - name: airbnb
+      - name: face
         ambassadorID: ambassador-2
+        optional_configurations:
+          timeout_ms: 3800000
+          connect_timeout_ms: 10000
+          retry_policy:
+            num_retries: 10
+            retry_on: 5xx
         mapping:
           - name: host
             source: test.haktech.io
             destination: facebook.com
-
+      - name: goog
+        ambassadorID: ambassador-2
+        mapping:
+          - name: host
+            source: ttest.haktech.io
+            destination: google.com
 
 nameOverride: ""
 fullnameOverride: ""

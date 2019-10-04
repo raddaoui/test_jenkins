@@ -2,8 +2,8 @@
 {{- $name := include "iap-connector.name" . -}}
 {{- $labels := include "iap-connector.labels" . -}}
 {{- $releaseName := .Release.Name -}}
-{{- range .Values.ingresses }}
-{{- range $route := .routing }}
+{{- range $ingress := .Values.ingresses }}
+{{- range $route := $ingress.routing }}
 ---
 apiVersion: v1
 kind: Service
@@ -13,6 +13,9 @@ metadata:
 {{ $labels | indent 4 }}
     service: ambassador
   annotations:
+    {{- if $ingress.enable_container_native_lb }}
+    cloud.google.com/neg: '{"ingress": true}'
+    {{- end }}
     getambassador.io/config: |
       {{- range $mapping := $route.mapping }}
       ---
@@ -25,6 +28,9 @@ metadata:
       service: https://{{ $mapping.destination }}:443
       host_rewrite: {{ $mapping.destination }}
       tls: True
+      {{- if $route.optional_configurations }}
+      {{- toYaml $route.optional_configurations | nindent 6}}
+      {{- end }}
       {{- end }}
 spec:
   type: NodePort
