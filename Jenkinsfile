@@ -42,7 +42,6 @@ pipeline {
                     github_branch = "${env.ENV}"
                 }
                 echo "${github_branch}"
-                sh("gcloud container cluster
                 dir ("${env.PROJECT_DIR}"){
                     checkout scm: [
                         $class: 'GitSCM', userRemoteConfigs: [
