@@ -22,7 +22,6 @@ pipeline {
         // CSV of approvers for this job - must be local Jenkins users, LDAP users, or LDAP groups
         APPROVERS = "ala"
         github = "${env.GIT_BRANCH}".split('/')
-        github2 = github[1]
     } 
     stages {
         stage('Init') {
