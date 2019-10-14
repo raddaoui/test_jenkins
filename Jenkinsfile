@@ -21,7 +21,6 @@ pipeline {
         ENV = "production"
         // CSV of approvers for this job - must be local Jenkins users, LDAP users, or LDAP groups
         APPROVERS = "ala"
-        def (origin, branch) =  "${env.GIT_BRANCH}".split('/')
     } 
     stages {
         stage('Init') {
@@ -34,6 +33,8 @@ pipeline {
                     }
                 }
                 script {
+                    def (origin, branch) =  "${env.GIT_BRANCH}".split('/')
+                    sh "echo ${origin}"
                     if (env.ENV == 'production') {
                         github_branch = "master"
                     } else {
