@@ -21,7 +21,7 @@ pipeline {
         ENV = "production"
         // CSV of approvers for this job - must be local Jenkins users, LDAP users, or LDAP groups
         APPROVERS = "ala"
-        github = "${env.GIT_BRANCH}".split("_")
+        github = "${env.GIT_BRANCH}".split('/')[1]
     } 
     stages {
         stage('Init') {
