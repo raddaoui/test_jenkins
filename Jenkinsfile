@@ -31,16 +31,17 @@ pipeline {
                         currentBuild.result = 'ABORTED'
                         error('Refreshing job configuration from Pipeline DSL.')
                     }
-                }
-                script {
+                    
                     def (origin, branch) =  "${env.GIT_BRANCH}".split('/')
-                    sh "echo ${origin}"
-                    if (env.ENV == 'production') {
-                        github_branch = "master"
+                    sh "echo ${branch}"
+                    
+                    if (branch == 'master') {
+                        environment = "prod"
                     } else {
-                        github_branch = "${env.ENV}"
-                    }
+                        environment = "${branch}"
+                    }   
                 }
+                sh "echo ${environment}"
                 sh "env"
                 withCredentials([file(credentialsId: "${env.GCP_CREDS_ID}", variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
