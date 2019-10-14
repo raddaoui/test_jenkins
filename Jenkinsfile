@@ -35,7 +35,7 @@ pipeline {
                 withCredentials([file(credentialsId: "${env.GCP_CREDS_ID}", variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                 }
-                sh("gcloud container clusters get-credentials ${params.cluster_name} --zone ${params.cluster_region} --project ${params.cluster_id}")
+                sh("gcloud container clusters get-credentials ${params.cluster_name} --zone ${params.cluster_region} --project ${env.PROJECT_ID}")
                 dir ("${env.PROJECT_DIR}"){
                     checkout scm: [
                         $class: 'GitSCM', userRemoteConfigs: [
