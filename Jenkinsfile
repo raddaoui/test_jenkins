@@ -39,7 +39,7 @@ pipeline {
                         github_branch = "${env.ENV}"
                     }
                 }
-                echo "${github_branch}"
+                echo "heyyyy"
                 withCredentials([file(credentialsId: "${env.GCP_CREDS_ID}", variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                 }
