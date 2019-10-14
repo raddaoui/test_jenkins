@@ -32,16 +32,18 @@ pipeline {
                         error('Refreshing job configuration from Pipeline DSL.')
                     }
                 }
+                script {
+                    if (env.ENV == 'production') {
+                        github_branch = master
+                    } else {
+                        github_branch = "${env.ENV}"
+                    }
+                }
+                echo "${github_branch}"
                 withCredentials([file(credentialsId: "${env.GCP_CREDS_ID}", variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                 }
                 sh("gcloud container clusters get-credentials ${params.cluster_name} --zone ${params.cluster_region} --project ${env.PROJECT_ID}")
-                if (env.ENV == 'production') {
-                    github_branch = master
-                } else{
-                    github_branch = "${env.ENV}"
-                }
-                echo "${github_branch}"
                 dir ("${env.PROJECT_DIR}"){
                     checkout scm: [
                         $class: 'GitSCM', userRemoteConfigs: [
