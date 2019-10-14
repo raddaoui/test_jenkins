@@ -1,0 +1,17 @@
+{
+    "id": 123,
+    "url": "http://jenkins.gcp-np.marketo.org:8080/project/some-folder/some-job",
+    "push_events": true,
+    "push_events_branch_filter": "",
+    "issues_events": false,
+    "confidential_issues_events": false,
+    "merge_requests_events": false,
+    "tag_push_events": true,
+    "note_events": false,
+    "job_events": false,
+    "pipeline_events": false,
+    "wiki_events": false,
+    "enable_ssl_verification": true,
+    "token": ""
+}
+

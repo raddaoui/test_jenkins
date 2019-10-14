@@ -1,0 +1,4 @@
+{
+  "skip_protected_branches": true,
+  "import_branches": [ "dev", "int", "qe", "st" ]
+}

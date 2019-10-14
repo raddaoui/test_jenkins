@@ -18,7 +18,7 @@ pipeline {
         GCP_CREDS_ID = "gcp-jenkins"
         GITHUB_CREDS_ID = "github-raddaoui"
         PROJECT_ID = "sada-ala-radaoui"
-        GITHUB_BRANCH = "master"
+        ENV = "production"
         // CSV of approvers for this job - must be local Jenkins users, LDAP users, or LDAP groups
         APPROVERS = "ala"
     }
@@ -36,6 +36,13 @@ pipeline {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                 }
                 sh("gcloud container clusters get-credentials ${params.cluster_name} --zone ${params.cluster_region} --project ${env.PROJECT_ID}")
+                if (env.ENV == 'production') {
+                    github_branch = master
+                } else{
+                    github_branch = "${env.ENV}"
+                }
+                echo "${github_branch}"
+                sh("gcloud container cluster
                 dir ("${env.PROJECT_DIR}"){
                     checkout scm: [
                         $class: 'GitSCM', userRemoteConfigs: [
