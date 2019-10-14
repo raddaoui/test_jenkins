@@ -35,7 +35,7 @@ pipeline {
                 withCredentials([file(credentialsId: "${env.GCP_CREDS_ID}", variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                 }
-                sh("gcloud container clusters get-credentials  --zone ${params.cluster_region} --project ${params.cluster_id}")
+                sh("gcloud container clusters get-credentials ${params.cluster_name} --zone ${params.cluster_region} --project ${params.cluster_id}")
                 dir ("${env.PROJECT_DIR}"){
                     checkout scm: [
                         $class: 'GitSCM', userRemoteConfigs: [
@@ -61,7 +61,7 @@ pipeline {
                 // Run the following steps from the DEPLOY_ENV directory
                 dir ("$DEPLOY_ENV") {
                     input(message: "\nContinue with action: ${params.action}?\n", submitter: "${env.APPROVERS}")
-                    sh("helm template -n iap-connector ./iap-connector/ -f values/${params.cluster_name}_values.yaml | kubectl ${params.action} -f- ") 
+                    sh("helm template -n iap-connector ./iap-connector/ -f values/${params.cluster_name}_values.yaml | kubectl ${params.action} -f- ")
                 }
             }
         }
