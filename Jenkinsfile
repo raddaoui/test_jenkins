@@ -34,12 +34,11 @@ pipeline {
                 }
                 script {
                     if (env.ENV == 'production') {
-                        github_branch = master
+                        github_branch = "master"
                     } else {
                         github_branch = "${env.ENV}"
                     }
                 }
-                echo "heyyyy"
                 withCredentials([file(credentialsId: "${env.GCP_CREDS_ID}", variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                 }
@@ -55,7 +54,7 @@ pipeline {
                         ],
                         branches: [
                             [
-                                name: "${env.GITHUB_BRANCH}"
+                                name: "${github_branch}"
                             ]
                         ],
                         poll: false
